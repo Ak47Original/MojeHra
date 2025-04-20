@@ -20,40 +20,53 @@ if (HP > MaxHP){
 string Monstr(monstr){
 cout << "Potkal jsi " << monstr << endl;
 }
-
+*/
 void Village(){
+int action, potvrzeni;
+potvrzeni = 0;
+while (potvrzeni == 0){
 cout << "Nasel jsi vesnici. Muzes doplnit zivoty (1), zvetsit pocet max zivotu (2), zvetsit pocet max many (3), zvetsit utok (4) odejit z vesnice (5).\n";
 cin >> action;
-if (action == 1){
-    cout << "Bude to stat 5 zlata. Chces doplnit zivoty?\n Ano (1)    Ne (0)\n";
+switch (action){
+case 1:
+cout << "Bude to stat 5 zlata. Chces doplnit zivoty?\n Ano (1)    Ne (0)\n";
     cin >> potvrzeni;
     if (potvrzeni == 1){
         void fullHP();
         action = 0;
-        cout << "Doplnil jsi " << << "zivotu a odesel z vesnice."
+        cout << "Doplnil jsi " << "zivotu a odesel z vesnice.";
     }
-} else {
-cout << "Muzes doplnit zivoty (1), zvetsit pocet max zivotu (2), zvetsit pocet max many (3), zvetsit utok (4) odejit z vesnice (5).\n";
-}
-if (action == 2){
-    cout << "Bude to stat 15 zlata. Chces dzvetsit pocet max zivotu?\n Ano (1)    Ne (0)\n";
+    break;
+case 2:
+    cout << "Bude to stat 15 zlata. Chces zvetsit pocet max zivotu?\n Ano (1)    Ne (0)\n";
     cin >> potvrzeni;
     if (potvrzeni == 1){
         int PlusMaxHP (5);
         int Heal (5);
         action = 0;
-        cout << "Doplnil jsi " << << "zivotu a odesel z vesnice."
+        cout << "Doplnil jsi " << "zivotu a odesel z vesnice.";
     }
-} else {
-cout << "Muzes doplnit zivoty (1), zvetsit pocet max zivotu (2), zvetsit pocet max many (3), zvetsit utok (4) odejit z vesnice (5).\n";
+    break;
+case 3:
+    cout << "Bude to stat 15 zlata. Chces zvetsit pocet max many?\n Ano (1)    Ne (0)\n";
+    cin >> potvrzeni;
+    if (potvrzeni == 1)
+    {
+        int PlusMaxHP(5);
+        int Heal(5);
+        action = 0;
+        cout << "Doplnil jsi " << "many a odesel z vesnice.";
+    }
+    break;
 }
 }
+}
 
 
 
-*/
-void RandomRoom()
-{
+
+
+void RandomRoom(){
 }
 void ChooseDifficulty()
 {
@@ -92,8 +105,7 @@ int EnemyAttack(int MonstrType)
     return n;
 }
 
-int main()
-{
+int main(){
     int HP, MaxHP, HealedHP, Utok, EnemyHP, Choice, Damage, XP, Gold, PlusGold, Level, Mana, action, potvrzeni, konecCyklu, Difficulty, Gamemode, Class;
     string Inventory[5], Schopnosti[3];
     string Tank, Archer, Rogue;
@@ -131,10 +143,30 @@ int main()
     {
     case 0:
         EnemyHP = EnemyHP - Utok;
-        cout << "Zasadil jsi " << Utok << " zranění.";
+        cout << "Zasadil jsi " << Utok << " zranění.\n";
+        while (EnemyHP > 0) {
+            cout << "Monstrum ještě žije.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+            switch (Choice)
+            {
+            case 0:
+                EnemyHP = EnemyHP - Utok;
+                cout << "Zasadil jsi " << Utok << " zranění.\n";
+                break;
+
+            case 1:
+                cout << "Utekl jsi od monstra jdeš dal.\n";
+                EnemyHP = 0;
+                break;
+            }
+
+        cout << "Monstrum zemřel jdeš dal.\n";
         break;
     case 1:
-        cout << "Utekl jsi z podzemí.";
+        cout << "Utekl jsi od monstra jdeš dal.\n";
+        EnemyHP = 0;
         break;
     }
+    Village();
+
+}
 }
