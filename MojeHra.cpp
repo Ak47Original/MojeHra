@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 /*void fullHP(){
@@ -17,10 +19,85 @@ if (HP > MaxHP){
     HP = MaxHP;
 }
 }
-string Monstr(monstr){
-cout << "Potkal jsi " << monstr << endl;
-}
 */
+struct
+{
+    int HP, MaxHP, HealedHP, Damage, Choice, XP, Gold, Level, Mana, konecCyklu, Difficulty, Gamemode, Class;
+    string Inventory[5], Schopnosti[3];
+    string Tank, Archer, Rogue;
+} Player;
+
+struct
+{
+    int HP, Damage, Gold, XP, Level, Mana, action, potvrzeni, konecCyklu;
+    string monstr;
+} Enemy;
+void PlayerAttack()
+{
+    Enemy.HP = Enemy.HP - Player.Damage;
+    cout << "Útočíš na monstra. Dostává " << Player.Damage << " zranění.\n";
+}
+void EnemyAttack()
+{
+    Player.HP = Player.HP - Enemy.Damage;
+    cout << "Dostáváš " << Enemy.Damage << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+}
+void EnemyDie()
+{
+    cout << "Monstrum zemřel.\n";
+    srand(time(0));
+    int a = rand() % 10 + 1;
+    if (a <= 5)
+    {
+        cout << "Dostavaš " << Enemy.XP << " zkušenosti a jdeš dal.\n";
+        Player.XP = Player.XP + Enemy.XP;
+    }
+    else if (a > 5)
+    {
+        Player.Gold = Player.Gold + Enemy.Gold;
+        cout << "Dostavaš " << Enemy.Gold << " zlata, " << Enemy.XP << " zkušenosti a jdeš dal.\n";
+    }
+}
+void Monstr(){
+    int Choice, Choice1;
+    Enemy.monstr = "monstr";
+    Enemy.HP = 10;
+    Enemy.Damage = 1;
+    int end = 0;
+    cout << "Potkal jsi " << Enemy.monstr << ". Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+    cin >> Choice;
+    switch (Choice)
+    {
+    case 0:
+        PlayerAttack();
+        while (end == 0 && Enemy.HP > 0) {
+            cout << "Monstrum ještě žije. Útočí na tebe. ";
+            EnemyAttack();
+            cin >> Choice1;
+            switch (Choice1)
+            {
+            case 0:
+                PlayerAttack();
+                break;
+
+            case 1:
+                cout << "Utekl jsi od monstra jdeš dal.\n";
+                end == 1;
+                break;
+            }
+            }
+        if (Enemy.HP <= 0){
+            EnemyDie();
+        }
+
+        break;
+    case 1:
+        cout << "Utekl jsi od monstra jdeš dal.\n";
+
+    }
+}
+
+
 void Village(){
 int action, potvrzeni;
 potvrzeni = 0;
@@ -67,6 +144,7 @@ case 3:
 
 
 void RandomRoom(){
+
 }
 void ChooseDifficulty()
 {
@@ -80,12 +158,32 @@ void ChooseGameMode()
     cout << "Vyber game mode.\nNormal (0)\nEndless (1)\nBoss Rush (2)\n";
     cin >> Gamemode;
 }
-int ChooseClass()
+void ChooseClass()
 {
-    int Class;
+
     cout << "Vyber class.\nTank (0)      Archer (1)      Rogue (2)\nHP 5 3 4\nUtok 3 5 4\nMana 0 2 2\nVěci meč luk dýka\n";
-    cin >> Class;
-    return Class;
+    cin >> Player.Class;
+    switch (Player.Class)
+    {
+    case 0:
+        Player.MaxHP = Player.HP = 5;
+        Player.Damage = 3;
+        Player.Mana = 0;
+        Player.Inventory[0] = "mec";
+        break;
+    case 1:
+        Player.MaxHP = Player.HP = 3;
+        Player.Damage = 5;
+        Player.Mana = 2;
+        Player.Inventory[0] = "luk";
+        break;
+    case 2:
+        Player.MaxHP = Player.HP = 4;
+        Player.Damage = 5;
+        Player.Mana = 2;
+        Player.Inventory[0] = "dyka";
+        break;
+    }
 }
 int EnemyAttack(int MonstrType)
 {
@@ -111,62 +209,11 @@ int main(){
     string Tank, Archer, Rogue;
     ChooseGameMode();
     ChooseDifficulty();
-    Class = ChooseClass();
-    switch (Class)
-    {
-    case 0:
-        MaxHP = HP = 5;
-        Utok = 3;
-        Mana = 0;
-        Inventory[0] = "mec";
-        break;
-    case 1:
-        MaxHP = HP = 3;
-        Utok = 5;
-        Mana = 2;
-        Inventory[0] = "luk";
-        break;
-    case 2:
-        MaxHP = HP = 4;
-        Utok = 5;
-        Mana = 2;
-        Inventory[0] = "dyka";
-        break;
-    }
+    ChooseClass();
+
     cout << "Ty vstupuješ do podzemí. Po pěti minutách chůze potkáš monstra. Nezbývá ti nic jiného než bojovat na život a na smrt.\n";
-    EnemyHP = 5;
-    Damage = EnemyAttack(1);
-    HP = HP - Damage;
-    cout << "Monstrum na tebe útočí. Dostáváš " << Damage << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
-    cin >> Choice;
-    switch (Choice)
-    {
-    case 0:
-        EnemyHP = EnemyHP - Utok;
-        cout << "Zasadil jsi " << Utok << " zranění.\n";
-        while (EnemyHP > 0) {
-            cout << "Monstrum ještě žije.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
-            switch (Choice)
-            {
-            case 0:
-                EnemyHP = EnemyHP - Utok;
-                cout << "Zasadil jsi " << Utok << " zranění.\n";
-                break;
-
-            case 1:
-                cout << "Utekl jsi od monstra jdeš dal.\n";
-                EnemyHP = 0;
-                break;
-            }
-
-        cout << "Monstrum zemřel jdeš dal.\n";
-        break;
-    case 1:
-        cout << "Utekl jsi od monstra jdeš dal.\n";
-        EnemyHP = 0;
-        break;
-    }
+    Monstr();
     Village();
 
 }
-}
+
