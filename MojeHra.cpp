@@ -1,6 +1,8 @@
+#include "rang/rang.hpp"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <iomanip>
 using namespace std;
 
 /*void fullHP(){
@@ -22,7 +24,7 @@ if (HP > MaxHP){
 */
 struct
 {
-    int HP, MaxHP, HealedHP, Damage, Choice, XP, Gold, Level, Mana, konecCyklu, Difficulty, Gamemode, Class;
+    int HP, MaxHP, HealedHP, Damage, XP, MaxXP, LogicXP, Gold, Level, Mana, MaxMana, konecCyklu, Difficulty, Gamemode, Class;
     string Inventory[5], Schopnosti[3];
     string Tank, Archer, Rogue;
 } Player;
@@ -31,7 +33,24 @@ struct
 {
     int HP, Damage, Gold, XP, Level, Mana, action, potvrzeni, konecCyklu;
     string monstr;
-} Enemy;
+} Enemy, Enemy1, Enemy2, Enemy3;
+
+struct
+{
+    int HP, Damage, Gold, XP, Level, Mana, action, potvrzeni, konecCyklu;
+    string monstr = "Miniboss";
+}Miniboss, Monstr;
+
+void Statistic()
+{
+    cout << setw(12) << rang::fgB::green << "HP: " << Player.HP << "/" << Player.MaxHP << endl << rang::style::reset;
+    cout << setw(12) << rang::fgB::red << "Útok: " << Player.Damage << endl << rang::style::reset;
+    cout << setw(12) << rang::fgB::blue << "Mana: " << Player.Mana << "/" << Player.MaxMana << endl << rang::style::reset;
+    cout << setw(12) << rang::fgB::yellow << "Gold: " << Player.Gold << endl << rang::style::reset;
+    cout << rang::fgB::cyan << "XP: " << Player.XP << "/" << Player.MaxXP << endl << rang::style::reset;
+    cout << rang::fgB::cyan << "Level: " << Player.Level << endl << rang::style::reset;
+}
+
 void PlayerAttack()
 {
     Enemy.HP = Enemy.HP - Player.Damage;
@@ -40,7 +59,22 @@ void PlayerAttack()
 void EnemyAttack()
 {
     Player.HP = Player.HP - Enemy.Damage;
+    if (Player.HP <= 0) {
+        cout << "Dostáváš " << Enemy.Damage << " zranění.\nZemřel jsi";
+    }
     cout << "Dostáváš " << Enemy.Damage << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+}
+void LevelUp()
+{
+    Player.XP = Player.XP - Player.MaxXP;
+    Player.Level++;
+    Player.MaxXP = Player.MaxXP + Player.LogicXP;
+    Player.LogicXP = Player.MaxXP - Player.LogicXP;
+    Player.MaxHP++;
+    Player.HP++;
+    Player.Damage++;
+    Player.Mana++;
+    Player.MaxMana++;
 }
 void EnemyDie()
 {
@@ -57,7 +91,11 @@ void EnemyDie()
         Player.Gold = Player.Gold + Enemy.Gold;
         cout << "Dostavaš " << Enemy.Gold << " zlata, " << Enemy.XP << " zkušenosti a jdeš dal.\n";
     }
-}
+    if (Player.XP > Player.MaxXP){
+        LevelUp();
+    }
+    }
+
 void Monstr(){
     int Choice, Choice1;
     Enemy.monstr = "monstr";
@@ -97,7 +135,64 @@ void Monstr(){
     }
 }
 
+void TwoMonstrs(){
 
+}
+
+void BossAttack(){
+    int tah = 1;
+    Enemy.Damage = Enemy.Damage * tah;
+    tah++;
+    if (tah > 4){
+        tah = 1;
+    }
+    Player.HP = Player.HP - Enemy.Damage;
+    if (Player.HP <= 0)
+    {
+        cout << "Dostáváš " << Enemy.Damage << " zranění.\nZemřel jsi";
+    }
+    cout << "Dostáváš " << Enemy.Damage << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+}
+
+void Spiketail(){
+    int Choice, Choice1;
+    Enemy.monstr = "Hlavni boss";
+    Enemy.HP = 50;
+    Enemy.Damage = 3;
+    int end = 0;
+    cout << "Potkal jsi hlavniho bossa Spiketaila. Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+    cin >> Choice;
+    switch (Choice)
+    {
+    case 0:
+        PlayerAttack();
+        while (end == 0 && Enemy.HP > 0)
+        {
+            cout << "Monstrum ještě žije. Útočí na tebe. ";
+            EnemyAttack();
+            cin >> Choice1;
+            switch (Choice1)
+            {
+            case 0:
+                PlayerAttack();
+                break;
+
+            case 1:
+                cout << "Utekl jsi od monstra jdeš dal.\n";
+                end == 1;
+                break;
+            }
+        }
+        if (Enemy.HP <= 0)
+        {
+            EnemyDie();
+        }
+
+        break;
+    case 1:
+        cout << "Utekl jsi od monstra jdeš dal.\n";
+    }
+}
 void Village(){
 int action, potvrzeni;
 potvrzeni = 0;
@@ -161,7 +256,12 @@ void ChooseGameMode()
 void ChooseClass()
 {
 
-    cout << "Vyber class.\nTank (0)      Archer (1)      Rogue (2)\nHP 5 3 4\nUtok 3 5 4\nMana 0 2 2\nVěci meč luk dýka\n";
+    cout << "Vyber class.\n";
+    cout << setw(5) << "Tank (0)" << setw(10) << "Archer (1)" << setw(15) << "Rogue (2)\n" << rang::style::reset;
+    cout << rang::fgB::green << "HP:" << setw(5) << "5" << setw(10) << "3" << setw(15) << "4\n" << rang::style::reset;
+    cout << rang::fgB::red << "Útok:" << setw(5) << "3" << setw(10) << "5" << setw(15) << "4\n" << rang::style::reset;
+    cout << rang::fgB::blue << "Mana:" << setw(5) << "0" << setw(10) << "2" << setw(15) << "2\n" << rang::style::reset;
+    cout << rang::fgB::magenta << "Věci:" << setw(5) << "meč" << setw(10) << "luk" << setw(15) << "dýka\n" << rang::style::reset;
     cin >> Player.Class;
     switch (Player.Class)
     {
@@ -184,23 +284,9 @@ void ChooseClass()
         Player.Inventory[0] = "dyka";
         break;
     }
-}
-int EnemyAttack(int MonstrType)
-{
-    int n;
-    switch (MonstrType)
-    {
-    case 0:
-        n = 1;
-        break;
-    case 1:
-        n = 2;
-        break;
-    case 2:
-        n = 3;
-        break;
-    }
-    return n;
+    Player.Level = 0;
+    Player.MaxXP = 1;
+    Player.LogicXP = 1;
 }
 
 int main(){
@@ -210,7 +296,7 @@ int main(){
     ChooseGameMode();
     ChooseDifficulty();
     ChooseClass();
-
+    Statistic();
     cout << "Ty vstupuješ do podzemí. Po pěti minutách chůze potkáš monstra. Nezbývá ti nic jiného než bojovat na život a na smrt.\n";
     Monstr();
     Village();
