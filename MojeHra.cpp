@@ -24,22 +24,40 @@ if (HP > MaxHP){
 */
 struct
 {
-    int HP, MaxHP, HealedHP, Damage, XP, MaxXP, LogicXP, Gold, Level, Mana, MaxMana, konecCyklu, Difficulty, Gamemode, Class;
+    int HP, Armor, MaxHP, HealedHP, Damage, XP, MaxXP, LogicXP, Gold, Level, Mana, MaxMana, konecCyklu, Difficulty, Gamemode, Class;
     string Inventory[5], Schopnosti[3];
     string Tank, Archer, Rogue;
 } Player;
 
+/*
 struct
 {
-    int HP, Damage, Gold, XP, Level, Mana, action, potvrzeni, konecCyklu;
+    int HP, Damage, Armor, Gold, Mana, Level, XP;
     string monstr;
 } Enemy, Enemy1, Enemy2, Enemy3;
+*/
+
+struct {
+    string monstr;
+    int HP, Damage, Armor, Gold, Mana, Level, XP;
+} Whispershade, Blooddepth, Earthdevourer, Darkscale, Rockclaw, Gloomcrawler, CreepingShadow, Deepcry, Mudlurker, Stoneworm, Dustfiend, Toothhorn, Quartzglow, Riftmad, Rotnewt, Enemy, Enemy1, Enemy2, Enemy3;
+
 
 struct
 {
     int HP, Damage, Gold, XP, Level, Mana, action, potvrzeni, konecCyklu;
     string monstr = "Miniboss";
-}Miniboss, Monstr;
+}Miniboss;
+
+// int HP, Damage, Armor, Gold, Mana;
+void SetValues()
+{
+    Whispershade = {"whispershade", 7, 2, 2, 5, 1, 0};
+    Blooddepth = {"blooddepth", 11, 1, 1, 7, 2, 1};
+    Earthdevourer = {"earthdevourer", 9, 2, 1, 9, 1, 2};
+    Darkscale = {"darkscale", 8, 3, 0, 14, 3, 3};
+    Rockclaw = {"rockclaw", 7, 1, 3, 12, 1, 4};
+}
 
 void Statistic()
 {
@@ -53,7 +71,7 @@ void Statistic()
 
 void PlayerAttack()
 {
-    Enemy.HP = Enemy.HP - Player.Damage;
+    Enemy.HP = Enemy.HP - (Player.Damage - Enemy.Armor);
     cout << "Útočíš na monstra. Dostává " << Player.Damage << " zranění.\n";
 }
 void EnemyAttack()
@@ -96,11 +114,29 @@ void EnemyDie()
     }
     }
 
-void Monstr(){
+void Monstr()
+{
+    srand(time(0));
+    int a = rand() % 5 + 1;
+    switch (a)
+    {
+    case 1:
+        Enemy = Whispershade;
+        break;
+    case 2:
+        Enemy = Blooddepth;
+        break;
+    case 3:
+        Enemy = Earthdevourer;
+        break;
+    case 4:
+        Enemy = Darkscale;
+        break;
+    case 5:
+        Enemy = Rockclaw;
+        break;
+    }
     int Choice, Choice1;
-    Enemy.monstr = "monstr";
-    Enemy.HP = 10;
-    Enemy.Damage = 1;
     int end = 0;
     cout << "Potkal jsi " << Enemy.monstr << ". Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
     cin >> Choice;
@@ -268,26 +304,28 @@ void ChooseClass()
     case 0:
         Player.MaxHP = Player.HP = 5;
         Player.Damage = 3;
-        Player.Mana = 0;
+        Player.MaxMana = Player.Mana = 0;
         Player.Inventory[0] = "mec";
         break;
     case 1:
         Player.MaxHP = Player.HP = 3;
         Player.Damage = 5;
-        Player.Mana = 2;
+        Player.MaxMana = Player.Mana = 2;
         Player.Inventory[0] = "luk";
         break;
     case 2:
         Player.MaxHP = Player.HP = 4;
         Player.Damage = 5;
-        Player.Mana = 2;
+        Player.MaxMana = Player.Mana = 2;
         Player.Inventory[0] = "dyka";
         break;
     }
-    Player.Level = 0;
+    Player.Level = 1;
     Player.MaxXP = 1;
     Player.LogicXP = 1;
 }
+
+
 
 int main(){
     int HP, MaxHP, HealedHP, Utok, EnemyHP, Choice, Damage, XP, Gold, PlusGold, Level, Mana, action, potvrzeni, konecCyklu, Difficulty, Gamemode, Class;
@@ -296,6 +334,7 @@ int main(){
     ChooseGameMode();
     ChooseDifficulty();
     ChooseClass();
+    SetValues();
     Statistic();
     cout << "Ty vstupuješ do podzemí. Po pěti minutách chůze potkáš monstra. Nezbývá ti nic jiného než bojovat na život a na smrt.\n";
     Monstr();
