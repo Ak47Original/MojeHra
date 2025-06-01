@@ -61,6 +61,15 @@ void Statistic()
     cout << rang::fgB::cyan << "Level: " << Player.Level << endl << rang::style::reset;
 }
 
+void CheckHP()
+{
+    if (Player.HP <= 0)
+    {
+        cout << "Ty zemřel!\n";
+        exit(0);
+    }
+}
+
 void fullHP()
 {
     Player.HealedHP = Player.MaxHP - Player.HP;
@@ -90,7 +99,7 @@ void PlayerAttack()
 {
     if (Player.Damage < Enemy.Armor)
     {
-        Player.Damage = Enemy.Armor;
+        Player.Damage = Enemy.Armor + 1;
     }
     Enemy.HP = Enemy.HP - (Player.Damage - Enemy.Armor);
     cout << "Útočíš na monstra. Dostává " << (Player.Damage - Enemy.Armor) << " zranění.\n";
@@ -105,7 +114,7 @@ void PlayerAttack1()
     case 0:
         if (Player.Damage < Enemy.Armor)
         {
-            Player.Damage = Enemy.Armor;
+            Player.Damage = Enemy.Armor + 1;
         }
         Enemy.HP = Enemy.HP - (Player.Damage - Enemy.Armor);
         cout << "Útočíš na " << Enemy.monstr << ". Dostává " << (Player.Damage - Enemy.Armor) << " zranění.\n";
@@ -113,7 +122,7 @@ void PlayerAttack1()
     case 1:
         if (Player.Damage < Enemy1.Armor)
         {
-            Player.Damage = Enemy1.Armor;
+            Player.Damage = Enemy1.Armor + 1;
         }
         Enemy1.HP = Enemy1.HP - (Player.Damage - Enemy1.Armor);
         cout << "Útočíš na " << Enemy1.monstr << ". Dostává " << (Player.Damage - Enemy1.Armor) << " zranění.\n";
@@ -134,7 +143,7 @@ void PlayerAttack2()
     case 0:
         if (Player.Damage < Enemy.Armor)
         {
-            Player.Damage = Enemy.Armor;
+            Player.Damage = Enemy.Armor + 1;
         }
         Enemy.HP = Enemy.HP - (Player.Damage - Enemy.Armor);
         cout << "Útočíš na " << Enemy.monstr << ". Dostává " << (Player.Damage - Enemy.Armor) << " zranění.\n";
@@ -142,7 +151,7 @@ void PlayerAttack2()
     case 1:
         if (Player.Damage < Enemy1.Armor)
         {
-            Player.Damage = Enemy1.Armor;
+            Player.Damage = Enemy1.Armor + 1;
         }
         Enemy1.HP = Enemy1.HP - (Player.Damage - Enemy1.Armor);
         cout << "Útočíš na " << Enemy1.monstr << ". Dostává " << (Player.Damage - Enemy1.Armor) << " zranění.\n";
@@ -150,7 +159,7 @@ void PlayerAttack2()
     case 2:
         if (Player.Damage < Enemy2.Armor)
         {
-            Player.Damage = Enemy2.Armor;
+            Player.Damage = Enemy2.Armor + 1;
         }
         Enemy2.HP = Enemy2.HP - (Player.Damage - Enemy2.Armor);
         cout << "Útočíš na " << Enemy2.monstr << ". Dostává " << (Player.Damage - Enemy2.Armor) << " zranění.\n";
@@ -160,42 +169,47 @@ void PlayerAttack2()
 
 void EnemyAttack()
 {
-    if (Enemy.Damage < Player.Armor) {
-        Enemy.Damage = Player.Armor;
+    if (Enemy.HP > 0){
+        if (Enemy.Damage < Player.Armor)
+        {
+            Enemy.Damage = Player.Armor + 1;
+        }
+        Player.HP = Player.HP - (Enemy.Damage - Player.Armor);
+        cout << "Dostáváš " << (Enemy.Damage - Player.Armor) << " zranění.\n";
+        CheckHP();
+        cout << "Můžeš zaútočit na monstrum(0) nebo utéct(1).\n";
     }
-    Player.HP = Player.HP - (Enemy.Damage - Player.Armor);
-    if (Player.HP <= 0) {
-        cout << "Dostáváš " << (Enemy.Damage - Player.Armor) << " zranění.\nZemřel jsi";
-    }
-    cout << "Dostáváš " << (Enemy.Damage - Player.Armor) << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+
 }
 
 void EnemyAttack1()
 {
-    if (Enemy1.Damage < Player.Armor)
-    {
-        Enemy1.Damage = Player.Armor;
+    if (Enemy1.HP > 0){
+        if (Enemy1.Damage < Player.Armor)
+        {
+            Enemy1.Damage = Player.Armor + 1;
+        }
+        Player.HP = Player.HP - (Enemy1.Damage - Player.Armor);
+        cout << "Dostáváš " << (Enemy1.Damage - Player.Armor) << " zranění.\n";
+        CheckHP();
+        cout << "Můžeš zaútočit na monstrum(0) nebo utéct(1).\n";
     }
-    Player.HP = Player.HP - (Enemy1.Damage - Player.Armor);
-    if (Player.HP <= 0)
-    {
-        cout << "Dostáváš " << (Enemy1.Damage - Player.Armor) << " zranění.\nZemřel jsi";
-    }
-    cout << "Dostáváš " << (Enemy1.Damage - Player.Armor) << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+
 }
 
 void EnemyAttack2()
 {
-    if (Enemy2.Damage < Player.Armor)
-    {
-        Enemy2.Damage = Player.Armor;
+    if (Enemy2.HP > 0){
+        if (Enemy2.Damage < Player.Armor)
+        {
+            Enemy2.Damage = Player.Armor + 1;
+        }
+        Player.HP = Player.HP - (Enemy2.Damage - Player.Armor);
+        cout << "Dostáváš " << (Enemy2.Damage - Player.Armor) << " zranění.\n";
+        CheckHP();
+        cout << "Můžeš zaútočit na monstrum(0) nebo utéct(1).\n";
     }
-    Player.HP = Player.HP - (Enemy2.Damage - Player.Armor);
-    if (Player.HP <= 0)
-    {
-        cout << "Dostáváš " << (Enemy2.Damage - Player.Armor) << " zranění.\nZemřel jsi";
-    }
-    cout << "Dostáváš " << (Enemy2.Damage - Player.Armor) << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+
 }
 
 void SpiketailAttack()
@@ -203,15 +217,13 @@ void SpiketailAttack()
     if (Boss.tah < 4 && Boss.tah > 0) {
         if (Boss.Damage < Player.Armor)
         {
-            Boss.Damage = Player.Armor;
+            Boss.Damage = Player.Armor++;
         }
         Player.HP = Player.HP - (Boss.Damage - Player.Armor);
         Boss.tah++;
-        if (Player.HP <= 0)
-        {
-            cout << "Dostáváš " << (Boss.Damage - Player.Armor) << " zranění.\nZemřel jsi";
-        }
-        cout << "Dostáváš " << (Boss.Damage - Player.Armor) << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+        cout << "Dostáváš " << (Boss.Damage - Player.Armor) << " zranění.\n";
+        CheckHP();
+        cout << "Můžeš zaútočit na monstrum(0) nebo utéct(1).\n";
     }
     if (Boss.tah == 4) {
         Player.HP = Player.HP - Boss.Damage;
@@ -220,11 +232,9 @@ void SpiketailAttack()
         {
             Boss.tah = 1;
         }
-        if (Player.HP <= 0)
-        {
-            cout << "Dostáváš " << Boss.Damage << " zranění.\nZemřel jsi";
-        }
-        cout << "Dostáváš " << Boss.Damage << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+        cout << "Dostáváš " << Boss.Damage << " zranění.\n";
+        CheckHP();
+        cout << "Můžeš zaútočit na monstrum(0) nebo utéct(1).\n";
     }
 }
 
@@ -380,8 +390,14 @@ void TwoMonstrs(){
         Enemy = Rockclaw;
         break;
     }
+    int Choice, Choice1;
+    int end = 0;
     srand(time(0));
     int b = rand() % 5 + 1;
+    while (b == a) {
+        srand(time(0));
+        int b = rand() % 5 + 1;
+    }
     switch (b)
     {
     case 1:
@@ -400,15 +416,13 @@ void TwoMonstrs(){
         Enemy1 = Rockclaw;
         break;
     }
-    int Choice, Choice1;
-    int end = 0;
     cout << "Potkal jsi " << Enemy.monstr << " a " << Enemy1.monstr << ". Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
     cin >> Choice;
     switch (Choice)
     {
     case 0:
         PlayerAttack1();
-        while (end == 0 && Enemy.HP > 0 && Enemy1.HP > 0)
+        while (end == 0 && (Enemy.HP + Enemy1.HP)> 0)
         {
             cout << "Monstrum ještě žije. Útočí na tebe. ";
             EnemyAttack1();
@@ -441,20 +455,6 @@ void TwoMonstrs(){
     }
 }
 
-void BossAttack(){
-    int tah = 1;
-    Enemy.Damage = Enemy.Damage * tah;
-    tah++;
-    if (tah > 4){
-        tah = 1;
-    }
-    Player.HP = Player.HP - Enemy.Damage;
-    if (Player.HP <= 0)
-    {
-        cout << "Dostáváš " << Enemy.Damage << " zranění.\nZemřel jsi";
-    }
-    cout << "Dostáváš " << Enemy.Damage << " zranění.\nMůžeš zaútočit na monstrum (0) nebo utéct (1).\n";
-}
 
 void Spiketail(){
     int Choice, Choice1;
@@ -506,30 +506,43 @@ case 1:
 cout << "Bude to stat 5 zlata. Chces doplnit zivoty?\n Ano (1)    Ne (0)\n";
     cin >> potvrzeni;
     if (potvrzeni == 1){
-        void fullHP();
-        action = 0;
-        cout << "Doplnil jsi " << "zivotu.\n";
+        if (Player.Gold >= 5){
+            void fullHP();
+            action = 0;
+            cout << "Doplnil jsi " << "zivotu.\n";
+        } else {
+            cout << "Nemáš dost zlata.\n";
+        }
     }
     break;
 case 2:
     cout << "Bude to stat 15 zlata. Chces zvetsit pocet max zivotu?\n Ano (1)    Ne (0)\n";
     cin >> potvrzeni;
     if (potvrzeni == 1){
-        int PlusMaxHP (5);
-        int Heal (5);
-        action = 0;
-        cout << "Doplnil jsi 5 zivotu.\n";
+        if (Player.Gold >= 15)
+        {
+            int PlusMaxHP(5);
+            int Heal(5);
+            action = 0;
+            cout << "Doplnil jsi 5 zivotu.\n";
+        } else {
+            cout << "Nemáš dost zlata.\n";
+        }
     }
     break;
 case 3:
     cout << "Bude to stat 15 zlata. Chces zvetsit pocet max many?\n Ano (1)    Ne (0)\n";
     cin >> potvrzeni;
-    if (potvrzeni == 1)
-    {
-        int PlusMaxHP(5);
-        int Heal(5);
-        action = 0;
-        cout << "Doplnil jsi " << "many.\n";
+    if (potvrzeni == 1){
+        if (Player.Gold >= 15){
+
+            int PlusMaxHP(5);
+            int Heal(5);
+            action = 0;
+            cout << "Doplnil jsi " << "many.\n";
+        } else {
+            cout << "Nemáš dost zlata.\n";
+        }
     }
     break;
 case 4:
