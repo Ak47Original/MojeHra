@@ -93,6 +93,7 @@ int Heal(int n)
         Player.HP = Player.HP + n;
         Player.HealedHP = n;
     }
+    cout << "Vyléčil jsi " << Player.HealedHP << "HP.\n";
 }
 
 void PlayerAttack()
@@ -165,6 +166,57 @@ void PlayerAttack2()
         cout << "Útočíš na " << Enemy2.monstr << ". Dostává " << (Player.Damage - Enemy2.Armor) << " zranění.\n";
         break;
     }
+}
+
+void MagicAttack()
+{
+    Enemy.HP = Enemy.HP - Player.Damage * 2;
+    cout << "Útočíš na monstra pomocí many. Dostává " << Player.Damage * 2 << " zranění.\n";
+    Player.Mana--;
+}
+
+void MagicAttack1()
+{
+    int Choice;
+    cout << "Na koho budeš utočit na " << Enemy.monstr << "(0) nebo na " << Enemy1.monstr << "(1).\n";
+    cin >> Choice;
+    switch (Choice)
+    {
+    case 0:
+
+        Enemy.HP = Enemy.HP - Player.Damage * 2;
+        cout << "Útočíš na " << Enemy.monstr << ". Dostává " << Player.Damage * 2 << " zranění.\n";
+        break;
+    case 1:
+
+        Enemy1.HP = Enemy1.HP - Player.Damage * 2;
+        cout << "Útočíš na " << Enemy1.monstr << ". Dostává " << Player.Damage * 2 << " zranění.\n";
+        break;
+    }
+    Player.Mana--;
+}
+
+void MagicAttack2()
+{
+    int Choice;
+    cout << "Na koho budeš utočit na " << Enemy.monstr << "(0) na " << Enemy1.monstr << "(1) nebo na " << Enemy2.monstr << "(2) .\n";
+    cin >> Choice;
+    switch (Choice)
+    {
+    case 0:
+        Enemy.HP = Enemy.HP - Player.Damage * 2;
+        cout << "Útočíš na " << Enemy.monstr << ". Dostává " << Player.Damage * 2 << " zranění.\n";
+        break;
+    case 1:
+        Enemy1.HP = Enemy1.HP - Player.Damage * 2;
+        cout << "Útočíš na " << Enemy1.monstr << ". Dostává " << Player.Damage * 2 << " zranění.\n";
+        break;
+    case 2:
+        Enemy2.HP = Enemy2.HP - Player.Damage * 2;
+        cout << "Útočíš na " << Enemy2.monstr << ". Dostává " << Player.Damage * 2 << " zranění.\n";
+        break;
+    }
+    Player.Mana--;
 }
 
 void EnemyAttack()
@@ -336,15 +388,16 @@ void Monstr(){
     }
     int Choice, Choice1;
     int end = 0;
-    cout << "Potkal jsi " << Enemy.monstr << ". Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+    cout << "Potkal jsi " << Enemy.monstr << ". Můžeš zaútočit na monstrum (0), zaútočit pomocí many (1) nebo vyléčit se (2).\n";
     cin >> Choice;
     switch (Choice)
     {
     case 0:
         PlayerAttack();
         while (end == 0 && Enemy.HP > 0) {
-            cout << "Monstrum ještě žije. Útočí na tebe. ";
+            cout << "Monstrum ještě žije. Útočí na tebe.";
             EnemyAttack();
+            cout << "Můžeš zaútočit na monstrum (0), zaútočit pomocí many (1) nebo vyléčit se (2).\n";
             cin >> Choice1;
             switch (Choice1)
             {
@@ -353,8 +406,9 @@ void Monstr(){
                 break;
 
             case 1:
-                cout << "Utekl jsi od monstra jdeš dal.\n";
-                end == 1;
+                MagicAttack();
+            case 2:
+                Heal(1);
                 break;
             }
             }
@@ -364,8 +418,10 @@ void Monstr(){
 
         break;
     case 1:
-        cout << "Utekl jsi od monstra jdeš dal.\n";
-
+        MagicAttack();
+    case 2:
+        Heal(1);
+        break;
     }
 }
 
@@ -394,10 +450,6 @@ void TwoMonstrs(){
     int end = 0;
     srand(time(0));
     int b = rand() % 5 + 1;
-    while (b == a) {
-        srand(time(0));
-        int b = rand() % 5 + 1;
-    }
     switch (b)
     {
     case 1:
@@ -416,7 +468,7 @@ void TwoMonstrs(){
         Enemy1 = Rockclaw;
         break;
     }
-    cout << "Potkal jsi " << Enemy.monstr << " a " << Enemy1.monstr << ". Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+    cout << "Potkal jsi " << Enemy.monstr << " a " << Enemy1.monstr << ". Můžeš zaútočit na monstrum (0), zaútočit pomocí many (1) nebo vyléčit se (2).\n";
     cin >> Choice;
     switch (Choice)
     {
@@ -451,7 +503,11 @@ void TwoMonstrs(){
 
         break;
     case 1:
-        cout << "Utekl jsi od monstra jdeš dal.\n";
+        MagicAttack();
+        break;
+    case 2:
+        Heal(1);
+        break;
     }
 }
 
@@ -462,7 +518,7 @@ void Spiketail(){
     Enemy.HP = 50;
     Enemy.Damage = 3;
     int end = 0;
-    cout << "Potkal jsi hlavniho bossa Spiketaila. Můžeš zaútočit na monstrum (0) nebo utéct (1).\n";
+    cout << "Potkal jsi hlavniho bossa Spiketaila. Můžeš zaútočit na monstrum (0), zaútočit pomocí many (1) nebo vyléčit se (2).\n";
     cin >> Choice;
     switch (Choice)
     {
@@ -492,7 +548,8 @@ void Spiketail(){
 
         break;
     case 1:
-        cout << "Utekl jsi od monstra jdeš dal.\n";
+        Heal(1);
+        break;
     }
 }
 void Village(){
